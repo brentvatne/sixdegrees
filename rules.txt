@@ -1,0 +1,60 @@
+first order:
+-mention and is mentioned by
+second order:
+-let's say: a is a first order friend with b,
+            b is first order friend with c,
+            then if c is not a first order friend with a,
+            c is a second order friend with a
+third order:
+-a first order connection of a second order connection
+-which is not first or second order with the subject
+fourth order:
+-a first order connection of a third order connection
+-which is not first, second, or third order with the subject
+... etc..
+
+SocialGraph
+Tweets
+Tweet
+Person
+Connection
+
+@social_graph = SocialGraphBuilder.parse(tweets.txt)
+
+def parse(file)
+  each_tweet_in_file(file) do |tweet|
+    @tweets = 
+  end
+end
+
+
+How to use Six Degrees of Separation
+-------------------------------------
+
+In your gemfile add:
+gem 'sixdegrees'
+
+And to require:
+require 'sixdegrees'
+
+tweets = Tweets.parse(file)
+social_graph = SocialGraph.build(tweets)
+
+You are not just limited to using Tweets to populate your social graph,
+you can pass in any enumerable object where each item responds to:
+  :sender
+    => should return a string with the name of the sender
+  :mentions
+    => should return an enumerable with each item having the name of a 
+       user who is mentioned in the tweet
+
+SocialGraph is enumerable as well, and will yield a node object, which responds
+to:
+  :connections
+  :first_degree
+  :second_degree
+  ... etc, to six
+
+For example, to see all connections in alphabetical order:
+p social_graph.all
+
