@@ -1,1 +1,2 @@
-require 'six_degrees/tweets'
+require 'six_degrees/twitter'
+require 'six_degrees/social_graph'
