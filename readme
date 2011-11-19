@@ -1,4 +1,6 @@
+RMU Entrance Exam for January, 2012
 PuzzleNode: Six Degrees of Separation
+http://puzzlenode.com/puzzles/23
 -------------------------------------
 Tested with Ruby 1.9.3p0
 
@@ -12,11 +14,16 @@ ruby lib/sixdegrees.rb "path/to/file.txt"
 
 Code:
 
-require 'sixdegrees'
-twitter_users = Tweets.parse("tweet_file.txt")
-social_graph = SocialGraph.build(twitter_users)
+require 'six_degrees'
 
-Tweets accepts a file of the format:
+tweets        = File.open("tweet_file.txt").read
+twitter_users = SixDegrees::Twitter.parse(tweets)
+social_graph  = SixDegrees::SocialGraph.build(twitter_users)
+
+or more simply:
+social_graph = SixDegrees::SocialGraph.build_from_tweets_file("tweet_file.txt")
+
+The parse method accepts a string of the format:
   alberta: @bob "It is remarkable, the character of the pleasure we derive from the best books."
 
 Parsing:
@@ -30,7 +37,7 @@ The tweets file is parsed it into a collection of TwitterUser objects, each of w
   :mentioned?(user)
     => accepts a user object that
 
-You are not just limited to using Tweets to populate your social graph;
+You are not just limited to using tweets to populate your social graph;
 you can pass in any enumerable object where each item implements the same interface
 as TwitterUser.
 
