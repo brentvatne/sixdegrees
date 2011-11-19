@@ -1,4 +1,4 @@
-require 'sixdegrees'
+require 'six_degrees'
 require 'rspec'
 
 RSpec.configure do |c|
