@@ -1,0 +1,79 @@
+PuzzleNode: Six Degrees of Separation
+-------------------------------------
+Tested with Ruby 1.9.3p0
+
+Sample Usage:
+--------------
+Before using, run bundle install.
+
+Command line:
+
+ruby lib/sixdegrees.rb "path/to/file.txt"
+
+Code:
+
+require 'sixdegrees'
+twitter_users = Tweets.parse("tweet_file.txt")
+social_graph = SocialGraph.build(twitter_users)
+
+Tweets accepts a file of the format:
+  alberta: @bob "It is remarkable, the character of the pleasure we derive from the best books."
+
+Parsing:
+--------------
+The tweets file is parsed it into a collection of TwitterUser objects, each of which responds to:
+  :name
+    => returns a string with the name of the sender
+  :mentions
+    => returns an enumerable with each item having the name of a 
+       user who is mentioned in the tweet
+  :mentioned?(user)
+    => accepts a user object that
+
+You are not just limited to using Tweets to populate your social graph;
+you can pass in any enumerable object where each item implements the same interface
+as TwitterUser.
+
+Building a Graph:
+------------------
+The graph builder takes the users and their mentions and builds a social graph
+out of it, and the graph can be accessed through the following api:
+
+  eg: social_graph.find("brent").connections.all
+    => returns all connections for brent
+  social_graph.find("brent").connections.first(5)
+    => returns the first 5 degrees of separation (ie: up to and including 5th order connections, if they exist) for brent
+  social_graph.all_connections
+    => returns every collection for every user
+
+To print all connections in alphabetical order:
+p social_graph.all_connections
+
+Connections:
+------------
+A connection is determined using the following rules:
+
+All examples are from the point of view of A.
+
+First order:
+  - A is mentioned by B, B is mentioned by A
+  => A is first order with B, B is first order with A
+  *note: if A mentions B and B does not mention A, there is no direct relationship
+
+Second order:
+  - A is first order with B
+  - B is first order with C
+  - A is not first order with C
+  => A is second order with C
+
+Third order:
+  - A is second order with B
+  - B is first order with C
+  - A has no higher level connection with C
+  => A is third order with C
+
+nth order:
+  - A is n-1th order with B
+  - B is first order with C
+  - A has no connection higher than n-1th order with C
+  => A has a nth order connection with C
