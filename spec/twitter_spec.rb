@@ -1,6 +1,6 @@
 describe SixDegrees::Twitter do
-  let(:tweet) { 'alberta: @bob "It is remarkable, the character of the pleasure we derive from the best books. /cc @christie\n' }
-  let(:multiple_tweets) { tweet + 'bob: "They impress us ever with the conviction that one nature wrote and the same reads." /cc @alberta\n' }
+  let(:tweet) { 'alberta: @bob "It is remarkable, the character of the pleasure we derive from the best books. /cc @christie' + "\n" }
+  let(:multiple_tweets) { tweet + 'bob: "They impress us ever with the conviction that one nature wrote and the same reads." /cc @alberta' + "\n" }
 
   describe "self#parse_name" do
     it "should parse the user name in a single tweet" do

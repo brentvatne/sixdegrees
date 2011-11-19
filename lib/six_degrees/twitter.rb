@@ -1,6 +1,8 @@
 module SixDegrees
-  # Packages methods for parsing a string containing multiple tweets
-  class Twitter
+  # Packages methods for parsing a string containing multiple tweets.
+  # Write your own module that implements parse and returns a collection
+  # of objects which implement the User interface to extend.
+  module Twitter
 
     # Public: Parse a string of text containing multiple tweets to
     # extract usernames, both of the user who tweeted and users
@@ -40,7 +42,7 @@ module SixDegrees
       #
       # No meaningful return value
       def each_tweet(tweets)
-        tweets.split(/\\n/).each do |tweet|
+        tweets.split("\n").each do |tweet|
           yield(tweet)
         end
       end
