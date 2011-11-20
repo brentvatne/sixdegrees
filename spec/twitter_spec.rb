@@ -23,28 +23,23 @@ describe SixDegrees::Twitter do
     end
 
     it "correctly parses the users mentioned in a tweet" do
-      parsed_users["alberta"].mentions.should include("bob")
+      parsed_users["alberta"].mentions.first.name.should == "bob"
     end
 
     it "parses more than one user" do
       users = SixDegrees::Twitter.parse(multiple_tweets)
-      first_user, second_user = users.values.first(2)
-
-      first_user.name.should == "alberta"
-      second_user.name.should == "bob"
-
-      first_user.mentions.should include("bob")
-      first_user.mentions.should include("christie")
-      second_user.mentions.should include("alberta")
+      users.length.should == 3
     end
   end
 
   context "SixDegrees::Twitter::User" do
-    describe "mentioned?" do
-      subject { SixDegrees::Twitter::User.new("alberta") }
+    subject { SixDegrees::Twitter::User.new("alberta") }
+    let(:bob) { SixDegrees::Twitter::User.new("bob") }
+    let(:brent) { SixDegrees::Twitter::User.new("brent") }
 
+    describe "mentioned?" do
       before do
-        subject.add_mentions(["bob", "brent"])
+        subject.add_mentions([bob, brent])
       end
 
       it "returns true if the subject has been mentioned the given name" do
@@ -57,17 +52,15 @@ describe SixDegrees::Twitter do
     end
 
     describe "add_mention" do
-      subject { SixDegrees::Twitter::User.new("brent") }
-
       describe "validations" do
         it "should not add the user's own name to their mentions" do
-          subject.add_mention("brent")
+          brent.add_mention(brent)
           subject.mentions.should be_empty
         end
 
         it "should not add a user's name if they are already mentioned" do
-          after_first_mention  = subject.add_mention("ana maria")
-          after_second_mention = subject.add_mention("ana ma")
+          after_first_mention  = Array.new(subject.add_mention(brent))
+          after_second_mention  = Array.new(subject.add_mention(brent))
           after_first_mention.should == after_second_mention
         end
       end

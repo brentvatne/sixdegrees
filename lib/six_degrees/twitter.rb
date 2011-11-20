@@ -20,25 +20,26 @@ module SixDegrees
     # Returns a hash of User objects, keyed by a String for name
     class << self
       def parse(tweets)
-        users = Hash.new { |hash, name| hash[name] = User.new(name) }
+        @users = Hash.new { |hash, name| hash[name] = User.new(name) }
 
         each_tweet(tweets) do |t|
           name     = parse_username(t)
-          mentions = parse_mentions(t)
+          mentions = names_to_references(parse_mentions(t))
 
-          users[name].add_mentions(mentions)
+          @users[name].add_mentions(mentions)
         end
 
-        users
+        @users
       end
 
-      # Private: Yield a single tweet to a passed block
+      def names_to_references(names)
+        names.map { |name| @users[name] }
+      end
+
+      # Private: Abstracts iteration over individual tweets
       #
       # tweets - A string containing multiple tweets separated by
       # newlines
-      #
-      # Abstracts the procedure of separating a list into individual
-      # tweets
       #
       # No meaningful return value
       def each_tweet(tweets)
@@ -82,31 +83,28 @@ module SixDegrees
 
       # Public: Determines whether the user has mentioned another user
       #
-      # name - A string containing the name of the user
-      #
       # Returns true if yes, false if no
       def mentioned?(name)
-        mentions.include?(name)
+        mentions.each do |mention|
+          return true if mention.name == name
+        end
+        false
       end
 
       # Public: Performs validation before adding a name to the list
       #
-      # name - A string containing the name of the user
-      #
       # Returns a reference to the mentions array
-      def add_mention(name)
-        @mentions << name unless name == self.name or mentions.include?(name)
+      def add_mention(user)
+        @mentions << user unless user.name == self.name or mentions.include?(user)
         mentions
       end
 
       # Public: Accepts a collection of names and proxies them one by
       # one to the add_mention method
       #
-      # names - A collection of strings containing name of mentioned users
-      #
       # Returns a reference to the mentions array
-      def add_mentions(names)
-        names.each { |name| add_mention(name) }
+      def add_mentions(users)
+        users.each { |user| add_mention(user) }
         mentions
       end
     end
