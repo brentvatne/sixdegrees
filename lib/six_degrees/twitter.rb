@@ -15,9 +15,9 @@ module SixDegrees
     #
     #   tweets = File.open("tweets.txt").read
     #   users = Twitter.parse(tweets)
-    #   # => a collection of User objects
+    #   # => a hash of User objects
     #
-    # Returns a collection of User objects
+    # Returns a hash of User objects, keyed by a String for name
     class << self
       def parse(tweets)
         users = Hash.new { |hash, name| hash[name] = User.new(name) }
