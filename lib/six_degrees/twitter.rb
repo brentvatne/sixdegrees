@@ -29,7 +29,7 @@ module SixDegrees
           users[name].add_mentions(mentions)
         end
 
-        users.values
+        users
       end
 
       # Private: Yield a single tweet to a passed block

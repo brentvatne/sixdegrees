@@ -18,21 +18,17 @@ describe SixDegrees::Twitter do
     let(:parsed_users)    { SixDegrees::Twitter.parse(tweet) }
     let(:return_value)    { parsed_users }
 
-    it "returns a collection" do
-      return_value.should respond_to(:[])
-    end
-
     it "correctly parses the name of the user in a tweet" do
-      parsed_users.first.name.should == "alberta"
+			parsed_users.should have_key("alberta")
     end
 
     it "correctly parses the users mentioned in a tweet" do
-      parsed_users.first.mentions.should include("bob")
+      parsed_users["alberta"].mentions.should include("bob")
     end
 
     it "parses more than one user" do
       users = SixDegrees::Twitter.parse(multiple_tweets)
-      first_user, second_user = users.first(2)
+      first_user, second_user = users.values.first(2)
 
       first_user.name.should == "alberta"
       second_user.name.should == "bob"
