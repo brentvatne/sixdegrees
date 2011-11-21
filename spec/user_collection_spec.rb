@@ -1,11 +1,11 @@
-describe SixDegrees::User do
+describe SixDegrees::UserCollection do
   subject { SixDegrees::User.new("alberta") }
   let(:bob) { SixDegrees::User.new("bob") }
   let(:brent) { SixDegrees::User.new("brent") }
 
   describe "mentioned?" do
     before do
-      subject.add_mentions([bob, brent])
+      subject.add_mentions([bob])
     end
 
     it "returns true if the subject has been mentioned the given name" do
@@ -29,6 +29,25 @@ describe SixDegrees::User do
         after_second_mention  = Array.new(subject.add_mention(brent))
         after_first_mention.should == after_second_mention
       end
+    end
+  end
+end
+
+describe SixDegrees::User do
+  subject { SixDegrees::User.new("alberta") }
+  let(:bob) { SixDegrees::User.new("bob") }
+  let(:brent) { SixDegrees::User.new("brent") }
+
+  describe "mutual_mentions" do
+    before do
+      subject.add_mentions([bob, brent])
+      bob.add_mentions([subject, brent])
+      brent.add_mentions([bob])
+    end
+
+    it "should accurately detect mutual mentions" do
+      subject.mutual_mentions.should include(bob)
+      bob.mutual_mentions.should include(subject, brent)
     end
   end
 end

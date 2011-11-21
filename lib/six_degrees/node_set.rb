@@ -1,39 +1,37 @@
 module SixDegrees
-  class SocialGraph
-    class NodeSet
-      include Enumerable
+  class NodeSet
+    include Enumerable
 
-      def initialize(named)
-        @set = []
-        named.keys.each { |name| add_node(name) }
+    def initialize(names)
+      @nodes = []
+      names.each { |name| add_node(name) }
+    end
+
+    def add_node(name)
+      @nodes << Node.new(name)
+      @nodes.sort!
+    end
+
+    def each(&block)
+      @nodes.each do |node|
+        yield(node)
       end
+    end
 
-      def add_node(name)
-        @set << Node.new(name)
-        @set.sort!
-      end
+    def length
+      @nodes.length
+    end
+  end
 
-      def each(&block)
-        @set.each do |node|
-          yield(node)
-        end
-      end
+  class Node
+    attr_accessor :name
 
-      def length
-        @set.length
-      end
+    def initialize(name)
+      @name = name
+    end
 
-      class Node
-        attr_accessor :name
-
-        def initialize(name)
-          @name = name
-        end
-
-        def <=>(other)
-          name.downcase <=> other.name.downcase
-        end
-      end
+    def <=>(other)
+      name.downcase <=> other.name.downcase
     end
   end
 end

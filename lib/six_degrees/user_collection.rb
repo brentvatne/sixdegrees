@@ -1,4 +1,42 @@
 module SixDegrees
+  class UserCollection
+    include Enumerable
+
+    def initialize
+      @users = Hash.new { |hash, name| hash[name] = User.new(name) }
+    end
+
+    def length
+      @users.length
+    end
+
+    def names
+      @users.values.map(&:name)
+    end
+
+    def each(&block)
+      @users.values.each do |user|
+        yield(user)
+      end
+    end
+
+    def add_mentions(name, mentions)
+      find_or_create(name).add_mentions(names_to_references(mentions))
+    end
+
+    def names_to_references(names)
+      names.map { |name| @users[name] }
+    end
+
+    def find_or_create(name)
+      @users[name]
+    end
+
+    def find(name)
+      @users.fetch(name)
+    end
+  end
+
   # Encapsulates the concept of a User that has a name and mentions
   # other users. A convenience class to make interacting with this
   # data easier and in appropriate domain language.
@@ -35,6 +73,12 @@ module SixDegrees
     def add_mentions(users)
       users.each { |user| add_mention(user) }
       mentions
+    end
+
+    def mutual_mentions
+      mentions.select do |mentioned_user|
+        mentioned_user.mentioned?(name)
+      end
     end
   end
 end

@@ -11,32 +11,21 @@ module SixDegrees
     # file - The string to be parsed. If using a file, you must read it
     # first into a string and then pass that string in.
     #
-    # Examples:
-    #
-    #   tweets = File.open("tweets.txt").read
-    #   users = TwitterParser.parse(tweets)
-    #   # => a hash of User objects
-    #
     # Returns a hash of User objects, keyed by a String for name. The User
     # object includes users who have tweeted and those have not tweeted but
     # have been mentioned.
     class << self
       def parse(tweets)
-        @users = Hash.new { |hash, name| hash[name] = User.new(name) }
+        users = UserCollection.new
 
         each_tweet(tweets) do |t|
           name     = parse_username(t)
-          mentions = names_to_references(parse_mentions(t))
+          mentions = parse_mentions(t)
 
-          @users[name].add_mentions(mentions)
+          users.add_mentions(name, mentions)
         end
 
-        @users
-      end
-
-      # This looks like it belongs in a UserCollection class!
-      def names_to_references(names)
-        names.map { |name| @users[name] }
+        users
       end
 
       # Private: Abstracts iteration over individual tweets
