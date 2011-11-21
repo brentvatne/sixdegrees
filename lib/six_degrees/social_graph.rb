@@ -7,10 +7,10 @@ module SixDegrees
 	class SocialGraph
     attr_reader :nodes, :edges
 
-		def initialize(people, depth=6)
-      @nodes = NodeSet.new(people.names)
+		def initialize(users, depth=6)
+      @nodes = NodeSet.new(users.names)
       @edges = EdgeSet.new
-      build_first_order(people)
+      build_first_order(users)
 			# build_nth_order(depth)
 			self
 		end
@@ -25,9 +25,9 @@ module SixDegrees
 
     end
 
-		def build_first_order(people)
-      people.each do |person|
-        connect :from  => person, :to => person.mutual_mentions, :order => 1
+		def build_first_order(users)
+      users.each do |user|
+        connect :from  => user, :to => user.mutual_mentions, :order => 1
       end
 		end	
 
