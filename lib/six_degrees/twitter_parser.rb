@@ -2,7 +2,7 @@ module SixDegrees
   # Packages methods for parsing a string containing multiple tweets.
   # Write your own module that implements parse and returns a collection
   # of objects which implement the User interface to extend.
-  module Twitter
+  class TwitterParser
 
     # Public: Parse a string of text containing multiple tweets to
     # extract usernames, both of the user who tweeted and users
@@ -14,7 +14,7 @@ module SixDegrees
     # Examples:
     #
     #   tweets = File.open("tweets.txt").read
-    #   users = Twitter.parse(tweets)
+    #   users = TwitterParser.parse(tweets)
     #   # => a hash of User objects
     #
     # Returns a hash of User objects, keyed by a String for name. The User

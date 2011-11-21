@@ -1,21 +1,21 @@
-describe SixDegrees::Twitter do
+describe SixDegrees::TwitterParser do
   let(:tweet) { 'alberta: @bob "It is remarkable, the character of the pleasure we derive from the best books. /cc @christie' + "\n" }
   let(:multiple_tweets) { tweet + 'bob: "They impress us ever with the conviction that one nature wrote and the same reads." /cc @alberta' + "\n" }
 
   describe "self#parse_name" do
     it "should parse the user name in a single tweet" do
-      SixDegrees::Twitter.parse_username(tweet).should == "alberta"
+      SixDegrees::TwitterParser.parse_username(tweet).should == "alberta"
     end
   end
 
   describe "self#parse_mentions" do
     it "should parse the mentions in a single tweet" do
-      SixDegrees::Twitter.parse_mentions(tweet).should == ["bob", "christie"]
+      SixDegrees::TwitterParser.parse_mentions(tweet).should == ["bob", "christie"]
     end
   end
 
   describe "self#parse" do
-    let(:parsed_users)    { SixDegrees::Twitter.parse(tweet) }
+    let(:parsed_users)    { SixDegrees::TwitterParser.parse(tweet) }
     let(:return_value)    { parsed_users }
 
     it "correctly parses the name of the user in a tweet" do
@@ -27,7 +27,7 @@ describe SixDegrees::Twitter do
     end
 
     it "parses more than one user" do
-      users = SixDegrees::Twitter.parse(multiple_tweets)
+      users = SixDegrees::TwitterParser.parse(multiple_tweets)
       users.length.should == 3
     end
   end
