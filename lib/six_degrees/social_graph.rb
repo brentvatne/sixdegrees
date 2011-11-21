@@ -59,14 +59,3 @@ module SixDegrees
     end
   end
 end
-
-
-# def order(n)
-#   #figure out how to interact with the edges
-#   #might make most sense to do something like
-#   #[0] => {:brent => [person, person, person], :ana => [person, person]}
-#   #[1] => {...}
-#   #etc..
-#   #and then order(1) would refer to [0] in the array (0 index)
-# end
-

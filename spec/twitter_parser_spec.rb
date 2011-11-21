@@ -26,10 +26,14 @@ describe SixDegrees::TwitterParser do
     end
 
     it "correctly parses the users mentioned in a tweet" do
-      parsed_users.find("alberta").mentioned?("bob").should be_true
-      parsed_users.find("bob").mentioned?("alberta").should be_true
-      parsed_users.find("bob").mentioned?("christie").should be_true
-      parsed_users.find("christie").mentioned?("bob").should be_true
+      alberta = parsed_users.find("alberta")
+      bob = parsed_users.find("bob")
+      christie = parsed_users.find("christie")
+
+      alberta.mentioned?(bob).should be_true
+      bob.mentioned?(alberta).should be_true
+      bob.mentioned?(christie).should be_true
+      christie.mentioned?(bob).should be_true
     end
 
     it "parses more than one user" do

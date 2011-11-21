@@ -48,14 +48,13 @@ module SixDegrees
       @mentions = []
     end
 
-    # Public: Determines whether the user has mentioned another user
+    # Public: Accepts a collection of names and proxies them one by
+    # one to the add_mention method
     #
-    # Returns true if yes, false if no
-    def mentioned?(name)
-      mentions.each do |mention|
-        return true if mention.name == name
-      end
-      false
+    # Returns a reference to the mentions array
+    def add_mentions(users)
+      users.each { |user| add_mention(user) }
+      mentions
     end
 
     # Public: Performs validation before adding a name to the list
@@ -66,18 +65,16 @@ module SixDegrees
       mentions
     end
 
-    # Public: Accepts a collection of names and proxies them one by
-    # one to the add_mention method
+    # Public: Determines whether the user has mentioned another user
     #
-    # Returns a reference to the mentions array
-    def add_mentions(users)
-      users.each { |user| add_mention(user) }
-      mentions
+    # Returns true if yes, false if no
+    def mentioned?(user)
+      @mentions.include?(user)
     end
 
     def mutual_mentions
       mentions.select do |mentioned_user|
-        mentioned_user.mentioned?(name)
+        mentioned_user.mentioned?(self)
       end
     end
   end
