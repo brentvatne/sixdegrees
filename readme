@@ -8,7 +8,6 @@ Sample Usage:
 --------------
 Before using, run bundle install.
 
-Code:
 require 'six_degrees'
 
 tweets        = File.open("tweet_file.txt").read
