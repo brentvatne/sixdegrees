@@ -2,10 +2,11 @@ module SixDegrees
 	# self.build_graph(..)
 	# self.build_graph_from_twitter_file(..)
 	
-	# Builds a social graph from a set of users and their mentions, and
+	# Builds a social graph from a set of nodes and their mentions, and
 	# provides methods to interact with the graph.
 	class SocialGraph
-    attr_reader :nodes, :edges
+    attr_reader :nodes
+    attr_reader :edges
 
 		def initialize(users, depth=6)
       @nodes = NodeSet.new(users.names)
@@ -15,47 +16,73 @@ module SixDegrees
 			self
 		end
 
-    def first_order_connection?(node_name, other_node_name)
-      edges.connected?(node_name, other_node_name, 1)
-    end
-
-    # Returns true if the from node is already connected to the to node
-    # Will need to do something like flatten the hash and combine all levels of froms
-    def connected?(from_node, to_node)
-
-    end
-
 		def build_first_order(users)
       users.each do |user|
         connect :from  => user, :to => user.mutual_mentions, :order => 1
       end
 		end	
 
+		# def build_nth_order(order)
+		#   #yields each node that has a connection at the given order - the outer loop of the pseudocode
+		#   each_node_with_connections_at_order(order-1) do |node|
+		#     connect :from => node, :to => discover_connections(node, order), :order => order
+		#   end
+		# end
+
+
+    def each_node_with_connections_at_order(n)
+      #edges.at_order(n).each do |node_name|
+      #  yield node.find(node_name)
+      #end
+    end
+
+    # 
+    # def discover_connections(node, order)
+    #   connections = []
+    #   each_node_connected_to node, :at => order-1 do |connected_node|
+    #     first_order_connections(connected_node).each do |potential|
+    #       connections << potential if not connected?(node, potential)
+    #     end
+    #   end
+    #   connections
+    # end
+
+    # Returns true if the from node is already connected to the to node
+    # Will need to do something like flatten the hash and combine all levels of froms
+    def connected?(from_node, to_user)
+      # edges.connected?(from_node, to_user)
+    end
+
+    # Operates on the edgeset to create an edge between two nodes, or one node and a collecion of nodes
+    #
+    # params
+    #   source - Name of the source node
+    #   to     - Name of the target node, or alternatively, an array of names
+    #   order  - The order at which this connection will be created
+    #
+    # No useful return value
 		def connect(params)
-			from = params[:from]; to = params[:to]; order = params[:order]
+      order = params[:order]; from = params[:from]; to = params[:to]
+			from  = nodes.find_by_name(from.name) if from.kind_of?(User)
+			to    = nodes.find_by_name(to.name) if to.kind_of?(User)
 
 			if to.kind_of?(Enumerable)
-				to.each { |singularized_to| connect :from => from, :to => singularized_to, :order => order }
+				to.each do |singularized_to|
+          connect :from => from, :to => singularized_to, :order => order
+        end
 			else
 				edges.add(from, to, order)
 			end
 		end
 
-    class EdgeSet
-      def initialize
-        @edges = {}
-      end
+    # Takes a node, pulls out all connections, and converts them into
+    # a single dimension array of nodes
+    def first_order_connections(node_name)
+      # edges.starting_at(node_name).at_order(1)
+    end
 
-      def add(from, to, group)
-        @edges[group] ||= {}
-        @edges[group][from.name] ||= []
-
-        @edges[group][from.name] << to.name
-      end
-
-      def connected?(from_name, to_name, group)
-        !!(@edges.fetch(group).fetch(from_name).include?(to_name))
-      end
+    def first_order_connection?(from, to)
+      edges.connected?(nodes.find_by_name(from), nodes.find_by_name(to), 1)
     end
   end
 end

@@ -12,6 +12,10 @@ module SixDegrees
       @nodes.sort!
     end
 
+		def find_by_name(name)
+			@nodes[@nodes.index(name)]
+		end
+
     def each(&block)
       @nodes.each do |node|
         yield(node)
@@ -30,6 +34,18 @@ module SixDegrees
       @name = name
     end
 
+		# To keep NodeSets easier to debug
+		def to_s
+			name
+		end
+
+		# To allow use to find elements easily using built in methods such
+		# as index on the containing collection, using just the name.
+		def ==(other)
+			@name == other.to_s
+		end
+
+		# Sort alphabetically by default
     def <=>(other)
       name.downcase <=> other.name.downcase
     end

@@ -48,6 +48,10 @@ module SixDegrees
       @mentions = []
     end
 
+		def to_s
+			name
+		end
+
     # Public: Accepts a collection of names and proxies them one by
     # one to the add_mention method
     #

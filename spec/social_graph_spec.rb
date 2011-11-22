@@ -20,11 +20,14 @@ describe SixDegrees::SocialGraph do
       subject.first_order_connection?("duncan", "bob").should be_true
       subject.first_order_connection?("duncan", "emily").should be_true
       subject.first_order_connection?("duncan", "farid").should be_true
+      subject.first_order_connection?("duncan", "alberta").should be_false
 
       subject.first_order_connection?("emily", "christie").should be_true
       subject.first_order_connection?("emily", "duncan").should be_true
+      subject.first_order_connection?("emily", "bob").should be_false
 
       subject.first_order_connection?("farid", "duncan").should be_true
+      subject.first_order_connection?("farid", "emily").should be_false
     end
   end
 
@@ -39,6 +42,16 @@ describe SixDegrees::SocialGraph do
 
       subject.first_order_connection?("bob", "alberta").should be_true
       subject.first_order_connection?("bob", "christie").should be_true
+    end
+  end
+
+  describe "each_node_with_connections_at_order" do
+    it "returns nodes connected at the given order" do
+
+    end
+
+    it "does not return nodes that are not connected at that order" do
+
     end
   end
 end
