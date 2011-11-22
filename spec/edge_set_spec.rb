@@ -36,6 +36,10 @@ describe SixDegrees::EdgeSet do
       subject.at_order(3).connected?(brent, diana).should be_true
       subject.at_order(3).connected?(jorge, diana).should be_false
     end
+
+    it "returns an empty EdgeSet instance if the order is not found" do
+      subject.at_order(100).should == SixDegrees::EdgeSet.new
+    end
   end
 
   describe "nodes_connected_to" do

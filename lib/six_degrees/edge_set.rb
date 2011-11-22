@@ -18,7 +18,11 @@ module SixDegrees
 
     # Returns all nodes that are connected at order n
     def at_order(order)
-      EdgeSet.new({ order => edges.fetch(order) })
+      if edges.has_key?(order)
+        EdgeSet.new({ order => edges.fetch(order) })
+      else
+        EdgeSet.new
+      end
     end
 
     # Returns all nodes connected to

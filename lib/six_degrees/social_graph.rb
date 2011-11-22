@@ -12,13 +12,12 @@ module SixDegrees
       @nodes = NodeSet.new(users.names)
       @edges = EdgeSet.new
       build_first_order(users)
-      # build_nth_order(2)
       build_up_to_nth_order(depth)
 			self
 		end
 
     def build_up_to_nth_order(depth)
-      (2..depth).times.each do |order|
+      (2..depth).each do |order|
         build_nth_order(order)
       end
     end
@@ -36,8 +35,8 @@ module SixDegrees
       end
     end
 
-    def each_node_with_connections_at_order(n)
-      edges.at_order(n).sources.each do |node|
+    def each_node_with_connections_at_order(order)
+      edges.at_order(order).sources.each do |node|
         yield(node)
       end
     end
