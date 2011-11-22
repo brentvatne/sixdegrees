@@ -25,6 +25,10 @@ module SixDegrees
       end
     end
 
+    def each_order
+      @edges.each { |order| yield(order) }
+    end
+
     # Returns all nodes connected to
     def nodes_connected_to(source_node)
       reduce_edges do |all_connected_nodes, edges_at_order_n|
