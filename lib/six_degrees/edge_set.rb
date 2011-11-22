@@ -21,23 +21,19 @@ module SixDegrees
       EdgeSet.new({ order => edges.fetch(order) })
     end
 
-    # Returns all edges that start at the given source name
-    def starting_at(source)
-
-    end
-
-    # Returns all edges that end at the given target name
-    def ending_at(target)
-
-    end
-
+    # Next step: make this get ALL edges connected to the source
     def from(source)
       edges[1].fetch(source)
     end
 
+    # Next step: make this get a 'uniq' list of sources at every order
     def sources
       edges[1].keys
     end
+
+    # Then, loop over the nth for the number of orders we want, write
+    # 3rd order acceptance test, and try on quiz data.
+    # Once that works, refactor.
 
     def endpoints
     end
@@ -56,7 +52,7 @@ module SixDegrees
       !!(@edges[order][source].include?(target))
     end
 
-    # If no order is passed, can iterate through all
+    # If no order is passed, iterate through all
     def connected?(source, target, order = :all)
       return true if source == target
 
