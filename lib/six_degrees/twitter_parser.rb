@@ -44,9 +44,10 @@ module SixDegrees
       #
       # tweet - A string containing a single tweet
       #
-      # Returns a string with the name of the user, eg: "notbrent"
+      # Returns a string with the name of the user, eg: "notbrent" or
+			# "not_brent"
       def parse_username(tweet)
-        tweet.match(/^\w+/).to_a.first
+        tweet.match(/^[\w_]+/).to_a.first
       end
 
       # Private Finds the names of every mentioned user within a given

@@ -12,8 +12,7 @@ module SixDegrees
       @nodes = NodeSet.new(users.names)
       @edges = EdgeSet.new
       build_first_order(users)
-      build_nth_order(2)
-      p edges
+      build_up_to_nth_order(depth)
 			self
 		end
 
@@ -22,6 +21,13 @@ module SixDegrees
         connect :from  => user, :to => user.mutual_mentions, :order => 1
       end
 		end	
+
+    def build_up_to_nth_order(depth)
+      build_nth_order(2)
+      # (2..depth) do |order|
+      #   build_nth_order(order)
+      # end
+    end
 
     def build_nth_order(order)
       #yields each node that has a connection at the given order - the outer loop of the pseudocode
@@ -56,17 +62,17 @@ module SixDegrees
     # Returns true if the from node is already connected to the to node
     # Will need to do something like flatten the hash and combine all levels of froms
     def connected?(from, to, order=:all)
-      from = nodes.find_by_name(from) if not from.kind_of?(User)
-      to   = nodes.find_by_name(to) if not from.kind_of?(User)
+      from = nodes.find_by_name(from) if not from.kind_of?(Node)
+      to   = nodes.find_by_name(to) if not from.kind_of?(Node)
       edges.connected?(from, to, order)
     end
 
     # Operates on the edgeset to create an edge between two nodes, or one node and a collecion of nodes
     #
-    # params
-    #   source - Name of the source node
-    #   to     - Name of the target node, or alternatively, an array of names
-    #   order  - The order at which this connection will be created
+    #  - params
+    #     :source - Source node (Node or User object)
+    #     :to     - Target node (Node or User object), or an array of Node or User objects
+    #     :order  - The order at which this connection will be created
     #
     # No useful return value
 		def connect(params)
@@ -83,8 +89,7 @@ module SixDegrees
 			end
 		end
 
-    # Takes a node, pulls out all connections, and converts them into
-    # a single dimension array of nodes
+    # This is a convenience method to make code more intention revealing
     def first_order_connections(node)
       edges.at_order(1).from(node)
     end
