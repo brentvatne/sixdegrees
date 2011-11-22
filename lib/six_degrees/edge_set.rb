@@ -13,7 +13,7 @@ module SixDegrees
     end
 
     def add(source, target, order)
-      edges[order][source] << target if target != source
+      edges[order][source].push(target).sort!.uniq! if target != source
     end
 
     # Returns all nodes that are connected at order n

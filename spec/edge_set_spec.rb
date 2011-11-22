@@ -26,6 +26,14 @@ describe SixDegrees::EdgeSet do
     end
   end
 
+  describe "add" do
+    it "will not let an edge be between a node and itself" do
+
+    end
+    it "will not create duplicate edges" do
+    end
+  end
+
   describe "at_order" do
     it "returns a new EdgeSet with only the edges at the given order" do
       subject.at_order(1).connected?(brent, ana).should be_true

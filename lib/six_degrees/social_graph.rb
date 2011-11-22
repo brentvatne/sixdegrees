@@ -6,7 +6,7 @@ module SixDegrees
     graph.nodes.each do |node|
       puts node.name
       graph.edges.each_order do |order|
-        puts order[node].join(", ")
+        puts order[node].join(", ") if (order[node].length > 0)
       end
       puts
     end
