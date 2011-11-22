@@ -1,11 +1,9 @@
 describe SixDegrees::EdgeSet do
   subject { SixDegrees::EdgeSet.new }
-  let(:brent)    { "brent" }
-  let(:ana)      { "ana" }
-  let(:mauricio) { "mauricio" }
-  let(:diego)    { "diego" }
-  let(:jorge)    { "jorge" }
-  let(:diana)    { "diana" }
+  let(:brent) { SixDegrees::Node.new("brent") }
+  let(:ana)   { SixDegrees::Node.new("ana") }
+  let(:jorge) { SixDegrees::Node.new("jorge") }
+  let(:diana) { SixDegrees::Node.new("diana") }
 
   # describe "initialize" do
   #   it "returns a new edgeset built from edges if passed a collection of edges" do
@@ -39,12 +37,22 @@ describe SixDegrees::EdgeSet do
     end
   end
 
-  describe "endpoints" do
-    
-  end
+  describe "nodes_connected_to" do
+    it "returns an array of nodes" do
+      subject.nodes_connected_to(brent).first.should be_kind_of SixDegrees::Node
+    end
 
-  describe "starting_at" do
-    # pending
+    it "only returns nodes connected the passed in node" do
+      subject.nodes_connected_to(brent).each do |supposedly_connected|
+        subject.connected?(brent, supposedly_connected).should be_true
+      end
+    end
+
+    it "get these nodes from every order" do
+      subject.nodes_connected_to(brent).should include(ana)
+      subject.nodes_connected_to(brent).should include(jorge)
+      subject.nodes_connected_to(brent).should include(diana)
+    end
   end
 
   # describe "ending_at" do

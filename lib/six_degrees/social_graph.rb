@@ -38,7 +38,7 @@ module SixDegrees
 
     def each_node_connected_to(node, params)
       order = params[:at]
-      edges.at_order(order).from(node).each do |connected_to|
+      edges.at_order(order).nodes_connected_to(node).each do |connected_to|
         yield(connected_to)
       end
     end
@@ -86,7 +86,7 @@ module SixDegrees
     # Takes a node, pulls out all connections, and converts them into
     # a single dimension array of nodes
     def first_order_connections(node)
-      edges.at_order(1).from(node)
+      edges.at_order(1).nodes_connected_to(node)
     end
 
     def first_order_connection?(from, to)
