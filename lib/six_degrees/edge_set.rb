@@ -22,9 +22,9 @@ module SixDegrees
     end
 
     # Returns all nodes connected to
-    def nodes_connected_to(source)
+    def nodes_connected_to(source_node)
       reduce_edges do |all_connected_nodes, edges_at_order_n|
-        all_connected_nodes << edges_at_order_n[source]
+        all_connected_nodes << edges_at_order_n[source_node]
       end
     end
 
@@ -38,22 +38,13 @@ module SixDegrees
     def reduce_edges(&block)
       edges.values.inject([]) do |total, edges_at_order_n|
         yield(total, edges_at_order_n)
-      end.flatten.uniq
+      end.flatten.uniq.sort
     end
 
     # Then, loop over the nth for the number of orders we want, write
     # 3rd order acceptance test, and try on quiz data.
     # Once that works, refactor.
-
-    def ==(other)
-      edges == other.edges
-    end
-
-    def connected_at_order?(source, target, order)
-      return false unless edges.keys.include?(order)
-      !!(@edges[order][source].include?(target))
-    end
-
+    #
     # If no order is passed, iterate through all
     def connected?(source, target, order = :all)
       return true if source == target
@@ -64,6 +55,16 @@ module SixDegrees
       else
         connected_at_order?(source, target, order)
       end
+    end
+
+    def connected_at_order?(source, target, order)
+      return false unless edges.keys.include?(order)
+      !!(@edges[order][source].include?(target))
+    end
+
+
+    def ==(other)
+      edges == other.edges
     end
   end
 end

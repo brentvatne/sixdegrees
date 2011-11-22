@@ -13,9 +13,15 @@ module SixDegrees
       @edges = EdgeSet.new
       build_first_order(users)
       build_nth_order(2)
-      p edges
+      # build_up_to_nth_order(depth)
 			self
 		end
+
+    # def build_up_to_nth_order(depth)
+    #   (2..depth).times.each do |order|
+    #     build_nth_order(order)
+    #   end
+    # end
 
 		def build_first_order(users)
       users.each do |user|

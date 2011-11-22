@@ -5,24 +5,25 @@ describe SixDegrees::EdgeSet do
   let(:jorge) { SixDegrees::Node.new("jorge") }
   let(:diana) { SixDegrees::Node.new("diana") }
 
-  # describe "initialize" do
-  #   it "returns a new edgeset built from edges if passed a collection of edges" do
-  #     pending
-  #   end
-  # end
-
   before do
-    subject.add brent, ana, 1
-    subject.add ana, brent, 1
+    subject.add brent, ana,   1
+    subject.add ana,   brent, 1
 
-    subject.add ana, jorge, 1
-    subject.add jorge, ana, 1
+    subject.add ana,   jorge, 1
+    subject.add jorge, ana,   1
 
     subject.add jorge, diana, 1
     subject.add diana, jorge, 1
 
     subject.add brent, jorge, 2
+    subject.add ana,   diana, 2
+    subject.add diana, ana,   2
     subject.add brent, diana, 3
+  end
+
+  describe "initialize" do
+    it "returns a new edgeset built from edges if passed a collection of edges" do
+    end
   end
 
   describe "at_order" do
@@ -52,6 +53,24 @@ describe SixDegrees::EdgeSet do
       subject.nodes_connected_to(brent).should include(ana)
       subject.nodes_connected_to(brent).should include(jorge)
       subject.nodes_connected_to(brent).should include(diana)
+    end
+  end
+
+  describe "sources" do
+    it "returns an array of nodes" do
+      subject.sources.first.should be_kind_of SixDegrees::Node
+    end
+
+    it "should be sorted" do
+      subject.sources.should == subject.sources.sort
+    end
+
+    it "returns all sources" do
+      subject.sources.should == [ana, brent, diana, jorge]
+    end
+
+    it "can be chained with at_order to return only sources from a certain order" do
+      subject.at_order(2).sources.should == [ana, brent, diana]
     end
   end
 
