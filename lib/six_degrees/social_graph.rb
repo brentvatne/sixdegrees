@@ -12,7 +12,8 @@ module SixDegrees
       @nodes = NodeSet.new(users.names)
       @edges = EdgeSet.new
       build_first_order(users)
-			# build_nth_order(depth)
+      build_nth_order(2)
+      p edges
 			self
 		end
 
@@ -30,20 +31,29 @@ module SixDegrees
     end
 
     def each_node_with_connections_at_order(n)
-      #edges.at_order(n).sources.each do |node|
-      #  yield node.find(node_name)
-      #end
+      edges.at_order(n).sources.each do |node|
+        yield(node)
+      end
     end
 
-    # def discover_connections(node, order)
-    #   connections = []
-    #   each_node_connected_to node, :at => order-1 do |connected_node|
-    #     first_order_connections(connected_node).each do |potential|
-    #       connections << potential if not connected?(node, potential)
-    #     end
-    #   end
-    #   connections
-    # end
+    def each_node_connected_to(node, params)
+      order = params[:at]
+      edges.at_order(order).from(node).each do |connected_to|
+        yield(connected_to)
+      end
+    end
+
+    def discover_connections(node, order)
+      connections = []
+      each_node_connected_to node, :at => order-1 do |connected_node|
+        p connected_node
+        first_order_connections(connected_node).each do |potential|
+          p potential
+          connections << potential if not connected?(node, potential)
+        end
+      end
+      connections
+    end
 
     # Returns true if the from node is already connected to the to node
     # Will need to do something like flatten the hash and combine all levels of froms
@@ -75,8 +85,8 @@ module SixDegrees
 
     # Takes a node, pulls out all connections, and converts them into
     # a single dimension array of nodes
-    def first_order_connections(node_name)
-      # edges.starting_at(node_name).at_order(1)
+    def first_order_connections(node)
+      edges.at_order(1).from(node)
     end
 
     def first_order_connection?(from, to)
