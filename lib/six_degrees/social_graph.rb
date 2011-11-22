@@ -46,9 +46,7 @@ module SixDegrees
     def discover_connections(node, order)
       connections = []
       each_node_connected_to node, :at => order-1 do |connected_node|
-        p connected_node
         first_order_connections(connected_node).each do |potential|
-          p potential
           connections << potential if not connected?(node, potential)
         end
       end
@@ -57,8 +55,10 @@ module SixDegrees
 
     # Returns true if the from node is already connected to the to node
     # Will need to do something like flatten the hash and combine all levels of froms
-    def connected?(from_node, to_user)
-      # edges.connected?(from_node, to_user)
+    def connected?(from, to, order=:all)
+      from = nodes.find_by_name(from) if not from.kind_of?(User)
+      to   = nodes.find_by_name(to) if not from.kind_of?(User)
+      edges.connected?(from, to, order)
     end
 
     # Operates on the edgeset to create an edge between two nodes, or one node and a collecion of nodes

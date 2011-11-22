@@ -29,6 +29,32 @@ describe SixDegrees::SocialGraph do
       subject.first_order_connection?("farid", "duncan").should be_true
       subject.first_order_connection?("farid", "emily").should be_false
     end
+
+		it "correctly identifies second order connections in the sample file" do
+			subject.connected?("alberta", "duncan", 2).should be_true
+			subject.connected?("alberta", "emily", 2).should be_true
+			subject.connected?("alberta", "bob", 2).should be_false
+
+			subject.connected?("bob", "emily", 2).should be_true
+			subject.connected?("bob", "farid", 2).should be_true
+			subject.connected?("bob", "alberta", 2).should be_false
+
+			subject.connected?("christie", "duncan", 2).should be_true
+			subject.connected?("christie", "alberta", 2).should be_false
+
+			subject.connected?("duncan", "alberta", 2).should be_true
+			subject.connected?("duncan", "christie", 2).should be_true
+			subject.connected?("duncan", "emily", 2).should be_false
+
+			subject.connected?("emily", "alberta", 2).should be_true
+			subject.connected?("emily", "bob", 2).should be_true
+			subject.connected?("emily", "farid", 2).should be_true
+			subject.connected?("emily", "christie", 2).should be_false
+
+			subject.connected?("farid", "bob", 2).should be_true
+			subject.connected?("farid", "emily", 2).should be_true
+			subject.connected?("farid", "duncan", 2).should be_false
+		end
   end
 
   describe "first order connections" do

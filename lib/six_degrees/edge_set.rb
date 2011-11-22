@@ -58,6 +58,8 @@ module SixDegrees
 
     # If no order is passed, can iterate through all
     def connected?(source, target, order = :all)
+      return true if source == target
+
       if order == :all
         edges.keys.each { |order| return true if connected_at_order?(source, target, order) }
         false
