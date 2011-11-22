@@ -22,21 +22,19 @@ module SixDegrees
       end
 		end	
 
-		# def build_nth_order(order)
-		#   #yields each node that has a connection at the given order - the outer loop of the pseudocode
-		#   each_node_with_connections_at_order(order-1) do |node|
-		#     connect :from => node, :to => discover_connections(node, order), :order => order
-		#   end
-		# end
-
+    def build_nth_order(order)
+      #yields each node that has a connection at the given order - the outer loop of the pseudocode
+      each_node_with_connections_at_order(order-1) do |node|
+        connect :from => node, :to => discover_connections(node, order), :order => order
+      end
+    end
 
     def each_node_with_connections_at_order(n)
-      #edges.at_order(n).each do |node_name|
+      #edges.at_order(n).sources.each do |node|
       #  yield node.find(node_name)
       #end
     end
 
-    # 
     # def discover_connections(node, order)
     #   connections = []
     #   each_node_connected_to node, :at => order-1 do |connected_node|
