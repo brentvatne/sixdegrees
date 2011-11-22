@@ -1,12 +1,11 @@
 module SixDegrees
   def self.build_graph_from_twitter_file(file)
-    tweets        = File.open(file).read
-    users_data    = TwitterParser.parse(tweets)
-    p users_data
-    graph         = SocialGraph.new(users_data)
+    tweets = File.open(file).read
+    users  = TwitterParser.parse(tweets)
+    graph  = SocialGraph.new(users)
     graph.nodes.each do |node|
       puts node.name
-      edges.each_order do |order|
+      graph.edges.each_order do |order|
         puts order[node].join(", ")
       end
       puts

@@ -26,7 +26,7 @@ module SixDegrees
     end
 
     def each_order
-      @edges.each { |order| yield(order) }
+      @edges.values.each { |order| yield(order) }
     end
 
     # Returns all nodes connected to
