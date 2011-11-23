@@ -8,7 +8,7 @@ module SixDegrees
 
   def self.print_graph(graph)
     graph.nodes.each do |node|
-      puts node.name
+      puts node
       graph.edges.each_order do |order|
         puts order[node].join(", ") if (order[node].length > 0)
       end
@@ -81,8 +81,8 @@ module SixDegrees
     # Returns true if the from node is already connected to the to node
     # Will need to do something like flatten the hash and combine all levels of froms
     def connected?(from, to, order=:all)
-      from = nodes.find_by_name(from) if not from.kind_of?(User)
-      to   = nodes.find_by_name(to) if not from.kind_of?(User)
+      from = nodes.find(from) if not from.kind_of?(User)
+      to   = nodes.find(to) if not from.kind_of?(User)
       edges.connected?(from, to, order)
     end
 
@@ -96,8 +96,8 @@ module SixDegrees
     # No useful return value
 		def connect(params)
       order = params[:order]; from = params[:from]; to = params[:to]
-			from  = nodes.find_by_name(from.name) if from.kind_of?(User)
-			to    = nodes.find_by_name(to.name) if to.kind_of?(User)
+			from  = nodes.find(from.name) if from.kind_of?(User)
+			to    = nodes.find(to.name) if to.kind_of?(User)
 
 			if to.kind_of?(Enumerable)
 				to.each do |singularized_to|
@@ -115,7 +115,7 @@ module SixDegrees
     end
 
     def first_order_connection?(from, to)
-      edges.connected?(nodes.find_by_name(from), nodes.find_by_name(to), 1)
+      edges.connected?(nodes.find(from), nodes.find(to), 1)
     end
   end
 end
