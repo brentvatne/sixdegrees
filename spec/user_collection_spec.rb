@@ -24,23 +24,16 @@ describe SixDegrees::UserCollection do
       end
     end
   end
-  describe "mutual_mentions" do
-    it "should identify bi-directional (mutual) mentions" do
-      alberta.mutual_mentions.should include bob
-      alberta.mutual_mentions.should_not include christie
-      bob.mutual_mentions.should include alberta
-    end
-  end
 end
 
 describe SixDegrees::User do
-  subject { SixDegrees::User.new("alberta") }
-  let(:bob) { SixDegrees::User.new("bob") }
-  let(:brent) { SixDegrees::User.new("brent") }
+  let(:alberta) { SixDegrees::User.new("alberta") }
+  let(:bob)     { SixDegrees::User.new("bob") }
+  let(:brent)   { SixDegrees::User.new("brent") }
 
   before do
-    subject.add_mention(bob)
-    bob.add_mentions([subject, brent])
+    alberta.add_mention(bob)
+    bob.add_mentions([alberta, brent])
     brent.add_mention(bob)
   end
 
@@ -53,18 +46,18 @@ describe SixDegrees::User do
   end
 
   describe "mentioned?" do
-    it "returns true when the user has been mentioned by the subject user" do
-      subject.mentioned?(bob).should be_true
+    it "returns true when the user has been mentioned by the user" do
+      alberta.mentioned?(bob).should be_true
     end
     it "returns false when the user has not been mentioned by the subject user" do
-      brent.mentioned?(subject).should be_false
+      brent.mentioned?(alberta).should be_false
     end
   end
 
   describe "mutual_mentions" do
     it "should accurately detect mutual mentions" do
-      subject.mutual_mentions.should include(bob)
-      bob.mutual_mentions.should include(subject, brent)
+      alberta.mutual_mentions.should include bob
+      bob.mutual_mentions.should include(alberta,brent)
     end
   end
 end

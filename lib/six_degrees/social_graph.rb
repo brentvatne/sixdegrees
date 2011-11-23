@@ -1,27 +1,4 @@
 module SixDegrees
-  def self.build_graph_from_twitter_file(file)
-    tweets = File.open(file).read
-    users  = TwitterParser.parse(tweets)
-    graph  = SocialGraph.new(users)
-    self.print_graph(graph)
-    end
-
-  def self.print_graph(graph)
-    graph.nodes.each do |node|
-      puts node
-      graph.edges.each_order do |order|
-        puts order[node].join(", ") if (order[node].length > 0)
-      end
-      puts
-    end
-  end
-
-  def self.print_graph_alphabetically(graph)
-  end
-
-	# self.build_graph(..)
-	# self.build_graph_from_twitter_file(..)
-	
 	# Builds a social graph from a set of nodes and their mentions, and
 	# provides methods to interact with the graph.
 	class SocialGraph
@@ -38,7 +15,9 @@ module SixDegrees
 
 		def build_first_order(users)
       users.each do |user|
-        connect :from  => user, :to => user.mutual_mentions, :order => 1
+        connect :from  => user.name,
+                :to => user.mutual_mentions.map(&:name),
+                :order => 1
       end
 		end	
 
@@ -65,24 +44,10 @@ module SixDegrees
       connections
     end
 
-    def each_node_with_connections(order)
-      edges.at_order(order).sources.each do |node|
-        yield(node)
-      end
-    end
-
-    def each_node_connected_to(node, params)
-      order = params[:at]
-      edges.at_order(order).nodes_connected_to(node).each do |connected_to|
-        yield(connected_to)
-      end
-    end
-
+    #
     # Returns true if the from node is already connected to the to node
     # Will need to do something like flatten the hash and combine all levels of froms
     def connected?(from, to, order=:all)
-      from = nodes.find(from) if from.kind_of?(User)
-      to   = nodes.find(to) if from.kind_of?(User)
       edges.connected?(from, to, order)
     end
 
@@ -96,8 +61,6 @@ module SixDegrees
     # No useful return value
 		def connect(params)
       order = params[:order]; from = params[:from]; to = params[:to]
-			from  = nodes.find(from.name) if from.kind_of?(User)
-			to    = nodes.find(to.name) if to.kind_of?(User)
 
 			if to.kind_of?(Enumerable)
 				to.each do |singularized_to|
@@ -116,6 +79,19 @@ module SixDegrees
 
     def first_order_connection?(from, to)
       edges.connected?(from, to, 1)
+    end
+
+    def each_node_with_connections(order)
+      edges.at_order(order).sources.each do |node|
+        yield(node)
+      end
+    end
+
+    def each_node_connected_to(node, params)
+      order = params[:at]
+      edges.at_order(order).nodes_connected_to(node).each do |connected_to|
+        yield(connected_to)
+      end
     end
   end
 end
