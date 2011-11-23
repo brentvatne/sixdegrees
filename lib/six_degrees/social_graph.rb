@@ -81,8 +81,8 @@ module SixDegrees
     # Returns true if the from node is already connected to the to node
     # Will need to do something like flatten the hash and combine all levels of froms
     def connected?(from, to, order=:all)
-      from = nodes.find(from) if not from.kind_of?(User)
-      to   = nodes.find(to) if not from.kind_of?(User)
+      from = nodes.find(from) if from.kind_of?(User)
+      to   = nodes.find(to) if from.kind_of?(User)
       edges.connected?(from, to, order)
     end
 
@@ -115,7 +115,7 @@ module SixDegrees
     end
 
     def first_order_connection?(from, to)
-      edges.connected?(nodes.find(from), nodes.find(to), 1)
+      edges.connected?(from, to, 1)
     end
   end
 end
