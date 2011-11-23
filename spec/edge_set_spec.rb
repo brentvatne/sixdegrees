@@ -85,16 +85,4 @@ describe SixDegrees::EdgeSet do
       subject.at_order(2).sources.should == [ana, brent, diana]
     end
   end
-
-  # describe "ending_at" do
-  #   pending
-  # end
-
-  # describe "connected?" do
-  #   pending
-  # end
-
-  # describe "ignore_order" do
-  #   pending
-  # end
 end

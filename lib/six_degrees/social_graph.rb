@@ -3,6 +3,10 @@ module SixDegrees
     tweets = File.open(file).read
     users  = TwitterParser.parse(tweets)
     graph  = SocialGraph.new(users)
+    self.print_graph(graph)
+    end
+
+  def self.print_graph(graph)
     graph.nodes.each do |node|
       puts node.name
       graph.edges.each_order do |order|
