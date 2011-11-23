@@ -44,13 +44,6 @@ module SixDegrees
       connections
     end
 
-    #
-    # Returns true if the from node is already connected to the to node
-    # Will need to do something like flatten the hash and combine all levels of froms
-    def connected?(from, to, order=:all)
-      edges.connected?(from, to, order)
-    end
-
     # Operates on the edgeset to create an edge between two nodes, or one node and a collecion of nodes
     #
     # params
@@ -79,6 +72,12 @@ module SixDegrees
 
     def first_order_connection?(from, to)
       edges.connected?(from, to, 1)
+    end
+
+    # Returns true if the from node is already connected to the to node
+    # Will need to do something like flatten the hash and combine all levels of froms
+    def connected?(from, to, order=:all)
+      edges.connected?(from, to, order)
     end
 
     def each_node_with_connections(order)
