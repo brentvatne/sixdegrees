@@ -1,30 +1,37 @@
 describe SixDegrees::EdgeSet do
   subject { SixDegrees::EdgeSet.new }
-  let(:brent)    { "brent" }
-  let(:ana)      { "ana" }
-  let(:mauricio) { "mauricio" }
-  let(:diego)    { "diego" }
-  let(:jorge)    { "jorge" }
-  let(:diana)    { "diana" }
-
-  # describe "initialize" do
-  #   it "returns a new edgeset built from edges if passed a collection of edges" do
-  #     pending
-  #   end
-  # end
+  let(:brent) { SixDegrees::Node.new("brent") }
+  let(:ana)   { SixDegrees::Node.new("ana") }
+  let(:jorge) { SixDegrees::Node.new("jorge") }
+  let(:diana) { SixDegrees::Node.new("diana") }
 
   before do
-    subject.add brent, ana, 1
-    subject.add ana, brent, 1
+    subject.add brent, ana,   1
+    subject.add ana,   brent, 1
 
-    subject.add ana, jorge, 1
-    subject.add jorge, ana, 1
+    subject.add ana,   jorge, 1
+    subject.add jorge, ana,   1
 
     subject.add jorge, diana, 1
     subject.add diana, jorge, 1
 
     subject.add brent, jorge, 2
+    subject.add ana,   diana, 2
+    subject.add diana, ana,   2
     subject.add brent, diana, 3
+  end
+
+  describe "initialize" do
+    it "returns a new edgeset built from edges if passed a collection of edges" do
+    end
+  end
+
+  describe "add" do
+    it "will not let an edge be between a node and itself" do
+
+    end
+    it "will not create duplicate edges" do
+    end
   end
 
   describe "at_order" do
@@ -37,25 +44,45 @@ describe SixDegrees::EdgeSet do
       subject.at_order(3).connected?(brent, diana).should be_true
       subject.at_order(3).connected?(jorge, diana).should be_false
     end
+
+    it "returns an empty EdgeSet instance if the order is not found" do
+      subject.at_order(100).should == SixDegrees::EdgeSet.new
+    end
   end
 
-  describe "endpoints" do
-    
+  describe "nodes_connected_to" do
+    it "returns an array of nodes" do
+      subject.nodes_connected_to(brent).first.should be_kind_of SixDegrees::Node
+    end
+
+    it "only returns nodes connected the passed in node" do
+      subject.nodes_connected_to(brent).each do |supposedly_connected|
+        subject.connected?(brent, supposedly_connected).should be_true
+      end
+    end
+
+    it "get these nodes from every order" do
+      subject.nodes_connected_to(brent).should include(ana)
+      subject.nodes_connected_to(brent).should include(jorge)
+      subject.nodes_connected_to(brent).should include(diana)
+    end
   end
 
-  describe "starting_at" do
-    # pending
+  describe "sources" do
+    it "returns an array of nodes" do
+      subject.sources.first.should be_kind_of SixDegrees::Node
+    end
+
+    it "should be sorted" do
+      subject.sources.should == subject.sources.sort
+    end
+
+    it "returns all sources" do
+      subject.sources.should == [ana, brent, diana, jorge]
+    end
+
+    it "can be chained with at_order to return only sources from a certain order" do
+      subject.at_order(2).sources.should == [ana, brent, diana]
+    end
   end
-
-  # describe "ending_at" do
-  #   pending
-  # end
-
-  # describe "connected?" do
-  #   pending
-  # end
-
-  # describe "ignore_order" do
-  #   pending
-  # end
 end

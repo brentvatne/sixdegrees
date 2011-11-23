@@ -1,4 +1,24 @@
 module SixDegrees
+  def self.build_graph_from_twitter_file(file)
+    tweets = File.open(file).read
+    users  = TwitterParser.parse(tweets)
+    graph  = SocialGraph.new(users)
+    self.print_graph(graph)
+    end
+
+  def self.print_graph(graph)
+    graph.nodes.each do |node|
+      puts node.name
+      graph.edges.each_order do |order|
+        puts order[node].join(", ") if (order[node].length > 0)
+      end
+      puts
+    end
+  end
+
+  def self.print_graph_alphabetically(graph)
+  end
+
 	# self.build_graph(..)
 	# self.build_graph_from_twitter_file(..)
 	
@@ -23,29 +43,15 @@ module SixDegrees
 		end	
 
     def build_up_to_nth_order(depth)
-      build_nth_order(2)
-      # (2..depth) do |order|
-      #   build_nth_order(order)
-      # end
+      (2..depth).each do |order|
+        build_nth_order(order)
+      end
     end
 
     def build_nth_order(order)
       #yields each node that has a connection at the given order - the outer loop of the pseudocode
-      each_node_with_connections_at_order(order-1) do |node|
+      each_node_with_connections(order-1) do |node|
         connect :from => node, :to => discover_connections(node, order), :order => order
-      end
-    end
-
-    def each_node_with_connections_at_order(n)
-      edges.at_order(n).sources.each do |node|
-        yield(node)
-      end
-    end
-
-    def each_node_connected_to(node, params)
-      order = params[:at]
-      edges.at_order(order).from(node).each do |connected_to|
-        yield(connected_to)
       end
     end
 
@@ -57,6 +63,19 @@ module SixDegrees
         end
       end
       connections
+    end
+
+    def each_node_with_connections(order)
+      edges.at_order(order).sources.each do |node|
+        yield(node)
+      end
+    end
+
+    def each_node_connected_to(node, params)
+      order = params[:at]
+      edges.at_order(order).nodes_connected_to(node).each do |connected_to|
+        yield(connected_to)
+      end
     end
 
     # Returns true if the from node is already connected to the to node
@@ -91,7 +110,7 @@ module SixDegrees
 
     # This is a convenience method to make code more intention revealing
     def first_order_connections(node)
-      edges.at_order(1).from(node)
+      edges.at_order(1).nodes_connected_to(node)
     end
 
     def first_order_connection?(from, to)

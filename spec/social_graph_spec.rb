@@ -55,6 +55,15 @@ describe SixDegrees::SocialGraph do
 			subject.connected?("farid", "emily", 2).should be_true
 			subject.connected?("farid", "duncan", 2).should be_false
 		end
+
+		it "correctly identifies third order connections in the sample file" do
+			subject.connected?("alberta", "farid", 3).should be_true
+
+			subject.connected?("christie", "farid", 3).should be_true
+
+			subject.connected?("farid", "alberta", 3).should be_true
+			subject.connected?("farid", "christie", 3).should be_true
+		end
   end
 
   describe "first order connections" do
