@@ -6,10 +6,6 @@ module SixDegrees
       @users = Hash.new { |hash, name| hash[name] = User.new(name) }
     end
 
-    def length
-      @users.length
-    end
-
     def names
       @users.values.map(&:name)
     end
@@ -48,10 +44,6 @@ module SixDegrees
       @mentions = []
     end
 
-		def to_s
-			name
-		end
-
     # Public: Accepts a collection of names and proxies them one by
     # one to the add_mention method
     #
@@ -76,6 +68,7 @@ module SixDegrees
       @mentions.include?(user)
     end
 
+    # Make this return a User collection
     def mutual_mentions
       mentions.select do |mentioned_user|
         mentioned_user.mentioned?(self)
