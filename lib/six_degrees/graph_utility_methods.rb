@@ -1,28 +1,41 @@
 module SixDegrees
-  # A collection of methods that make code more readable.
+  # A collection of methods that abstract away the details of dealing with EdgeSet and
+  # NodeSet interfaces to make them more accesible. These methods make up the public
+  # API of SocialGraph
   module GraphUtilityMethods
-    # Takes a node, pulls out all connections, and converts them into
-    # a single dimension array of nodes
+
+    # Public: Selects are first order connections for a given node
+    #
+    # node - A String representing a node
+    #
+    # Returns an array of Strings representing nodes
     def first_order_connections(node)
       edges.at_order(1).nodes_connected_to(node)
     end
 
+    # Public: Determines if a first order connection exists from node "from" to node "to"
+    #
+    # Returns an array of Strings representing nodes
     def first_order_connection?(from, to)
       edges.connected?(from, to, 1)
     end
 
-    # Returns true if the from node is already connected to the to node
-    # Will need to do something like flatten the hash and combine all levels of froms
+    # Public: Determines whether an edge exists a given node to the other given node
+    #
+    # Returns true if connected, false if not
     def connected?(from, to, order=:all)
       edges.connected?(from, to, order)
     end
 
+    # Public: Iterates over each node that is the start point of a connection at a given order
     def each_node_with_connections(order)
       edges.at_order(order).sources.each do |node|
         yield(node)
       end
     end
 
+    # Public: Iterates over each node that is the end point of a connection of the given node, 
+    # at any order
     def each_node_connected_to(node, params)
       order = params[:at]
       edges.at_order(order).nodes_connected_to(node).each do |connected_to|

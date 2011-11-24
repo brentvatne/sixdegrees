@@ -1,15 +1,13 @@
 module SixDegrees
-  # The job of this class is to manage logic related to connections between nodes
+  # Manages logic related to connections between nodes, also known as edges
   class EdgeSet
-    # A two-dimensional Hash edges[order][source_node]
+    # A two-dimensional Hash edges[order][source_node] = [connected_node_1, connected_node_2]
     attr_reader :edges
 
     # Initializes a new set of edges, and if another set is passed in, it is copied
     # into the new collection.
     #
-    # edge_set - An EdgeSet instance
-    #
-    # Returns a new EdgeSet instance
+    # edge_set - An EdgeSet instance, default is false
     def initialize(edge_set = false)
       @edges  = Hash.new do |order_hash, order|
         order_hash[order] = Hash.new { |source_node_hash, source| source_node_hash[source] = [] }
