@@ -6,16 +6,16 @@ Tested with Ruby 1.9.3p0
 
 Sample Usage:
 --------------
-Before using, run bundle install.
 
-require 'six_degrees'
+    require 'six_degrees'
 
-tweets        = File.open("tweet_file.txt").read
-twitter_users = SixDegrees::Twitter.parse(tweets)
-social_graph  = SixDegrees::SocialGraph.new(twitter_users)
+    tweets        = File.open("tweet_file.txt").read
+    twitter_users = SixDegrees::TwitterParser.parse(tweets)
+    social_graph  = SixDegrees::SocialGraph.new(twitter_users)
 
-The parse method accepts a string of the format:
-  alberta: @bob "It is remarkable, the character of the pleasure we derive from the best books."
+Or you can use the twitter_network.rb file from the command line:
+
+    ruby bin/twitter_graph full_path_to_file
 
 Parsing:
 --------------
@@ -26,13 +26,6 @@ Building a Graph:
 ------------------
 The graph builder takes the users and their mentions and builds a social graph
 out of it, and the graph can be accessed through the following api:
-
-  eg: social_graph.find("brent").connections.all
-    => returns all connections for brent
-  social_graph.find("brent").connections.first(5)
-    => returns the first 5 degrees of separation (ie: up to and including 5th order connections, if they exist) for brent
-  social_graph.print_all_connections
-    => prints all users in alphabetical order, each one with all of their connections, sorted by 'order', and also alphabetically organized
 
 Connections:
 ------------

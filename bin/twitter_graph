@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require File.join(File.expand_path(File.dirname(__FILE__)), '/../lib/six_degrees')
 
 module SixDegrees
@@ -19,5 +20,6 @@ module SixDegrees
   end
 end
 
-SixDegrees::build_graph_from_twitter_file("/Users/CHIPI3/coding/ruby/sixdegrees/docs/complex_input.txt")
+file_path = ARGV[0] || File.expand_path("../sixdegrees/docs/complex_input.txt")
 
+SixDegrees::build_graph_from_twitter_file(file_path)
