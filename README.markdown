@@ -1,5 +1,4 @@
-# RMU Entrance Exam for January, 2012 - Brent Vatne
-## PuzzleNode: Six Degrees of Separation
+## RMU Entrance Exam Jan, 2011 - PuzzleNode: Six Degrees of Separation
 ### Problem Description:
 http://puzzlenode.com/puzzles/23
 
