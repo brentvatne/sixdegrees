@@ -46,7 +46,8 @@ describe SixDegrees::EdgeSet do
     end
 
     it "returns an empty EdgeSet instance if the order is not found" do
-      subject.at_order(100).should == SixDegrees::EdgeSet.new
+      subject.at_order(100).should be_kind_of SixDegrees::EdgeSet
+      subject.at_order(100).edges.length.should == 0
     end
   end
 

@@ -1,4 +1,5 @@
 module SixDegrees
+  # A collection of methods that make code more readable.
   module GraphUtilityMethods
     # Takes a node, pulls out all connections, and converts them into
     # a single dimension array of nodes

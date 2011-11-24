@@ -35,7 +35,7 @@ module SixDegrees
       end
 		end	
 
-    # Builds connections from order 2 to depth.
+    # Builds connections from order 2 to up to depth.
     # First order connections must be built prior to calling this method in order
     # for it to work.
     # No useful return value

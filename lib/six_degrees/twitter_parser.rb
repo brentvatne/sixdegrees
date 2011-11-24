@@ -40,7 +40,7 @@ module SixDegrees
         end
       end
 
-      # Private: Finds the name of the user who made a given tweet
+      # Finds the name of the user who made a given tweet
       #
       # tweet - A string containing a single tweet
       #
@@ -49,7 +49,7 @@ module SixDegrees
         tweet.match(/^\w+/).to_a.first
       end
 
-      # Private Finds the names of every mentioned user within a given
+      # Finds the names of every mentioned user within a given
       # tweet
       #
       # tweet - A string containing a single tweet
