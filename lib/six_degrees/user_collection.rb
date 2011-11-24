@@ -10,7 +10,7 @@ module SixDegrees
       @users.values.map(&:name)
     end
 
-    def each(&block)
+    def each
       @users.values.each do |user|
         yield(user)
       end
@@ -37,14 +37,17 @@ module SixDegrees
   # other users. A convenience class to make interacting with this
   # data easier and in appropriate domain language.
   class User
-    attr_reader :name, :mentions
+    # A String
+    attr_reader :name
+    # An Array of User objects
+    attr_reader :mentions
 
     def initialize(name)
       @name = name
       @mentions = []
     end
 
-    # Public: Accepts a collection of names and proxies them one by
+    # Accepts a collection of names and proxies them one by
     # one to the add_mention method
     #
     # Returns a reference to the mentions array
@@ -53,7 +56,7 @@ module SixDegrees
       mentions
     end
 
-    # Public: Performs validation before adding a name to the list
+    # Performs validation before adding a name to the list
     #
     # Returns a reference to the mentions array
     def add_mention(user)
@@ -61,14 +64,16 @@ module SixDegrees
       mentions
     end
 
-    # Public: Determines whether the user has mentioned another user
+    # Determines whether the user has mentioned another user
     #
     # Returns true if yes, false if no
     def mentioned?(user)
       @mentions.include?(user)
     end
 
-    # Make this return a User collection
+    # Selects all users that are mentioned by this user that also mention this user
+    #
+    # Returns an Array of User objects
     def mutual_mentions
       mentions.select do |mentioned_user|
         mentioned_user.mentioned?(self)

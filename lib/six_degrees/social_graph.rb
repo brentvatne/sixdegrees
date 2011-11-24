@@ -22,7 +22,6 @@ module SixDegrees
       @edges = EdgeSet.new
       build_first_order(users)
       build_up_to_nth_order(depth)
-			self
 		end
 
     # Builds the first order of connections from a UserCollection

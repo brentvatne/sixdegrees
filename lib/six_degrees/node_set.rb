@@ -16,7 +16,7 @@ module SixDegrees
 			@nodes[@nodes.index(name)]
 		end
 
-    def each(&block)
+    def each
       @nodes.each do |node|
         yield(node)
       end
