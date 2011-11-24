@@ -1,12 +1,13 @@
-## RMU Entrance Exam Jan, 2011 - PuzzleNode: Six Degrees of Separation
-### Problem Description:
+# RMU Entrance Exam Jan, 2011 - PuzzleNode: Six Degrees of Separation
+### Brent Vatne
+## Problem Description:
 http://puzzlenode.com/puzzles/23
 
-### Run the tests:
+## Run the tests:
 Uses Rspec, to run the suite: `bundle install && rake`
 *Tested with Ruby 1.9.3p0*
 
-### Use it:
+## Use it:
 
 ````ruby
 require 'six_degrees'
@@ -20,27 +21,27 @@ Or you can use the twitter_network.rb file from the command line:
 
 `ruby bin/twitter_graph full_path_to_file`
 
-### Read the code:
+## Read the code:
 Extensive documentation has been provided inline, roughly according to
 the TomDoc specification - http://tomdoc.org/
 
-### Extend it:
+## Extend it:
 Write your own parser that populates a UserCollection instance with
 users and their mentions, then pass that in to a new SocialGraph.
 
-### What it does:
+## What it does:
 SocialGraph analyzes a set of tweets to determine which users are
 connected through their mentions and at what order the connection exists.
 
 A connection is determined using the following rules:
 
-#### First order connection:
+### First order connection:
 
 -   A is mentioned by B, B is mentioned by A
 -   => A is first order with B, B is first order with A
     *note: if A mentions B and B does not mention A, there is no direct relationship
 
-#### nth order connection:
+### nth order connection:
 
 -   A is n-1th order with B
 -   B is first order with C
