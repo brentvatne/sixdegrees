@@ -2,7 +2,7 @@
 ### Brent Vatne
 
 ## Notes for the reviewers
-I certainly could have solved this problem with less code, but in the
+I could have solved this problem with less code, but in the
 interest of clarity I have tried to abstract away a lot of the details
 into domain objects, such as EdgeSet.
 
