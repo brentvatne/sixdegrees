@@ -1,33 +1,22 @@
 module SixDegrees
-  def self.build_graph_from_twitter_file(file)
-    tweets = File.open(file).read
-    users  = TwitterParser.parse(tweets)
-    graph  = SocialGraph.new(users)
-    self.print_graph(graph)
-    end
-
-  def self.print_graph(graph)
-    graph.nodes.each do |node|
-      puts node.name
-      graph.edges.each_order do |order|
-        puts order[node].join(", ") if (order[node].length > 0)
-      end
-      puts
-    end
-  end
-
-  def self.print_graph_alphabetically(graph)
-  end
-
-	# self.build_graph(..)
-	# self.build_graph_from_twitter_file(..)
-	
-	# Builds a social graph from a set of nodes and their mentions, and
-	# provides methods to interact with the graph.
+	# Builds a social graph from a set of nodes and their mentions, and provides
+  # methods to interact with the graph.
 	class SocialGraph
+    # Useful methods to make the class more readable
+    include GraphUtilityMethods
+
+    # A NodeSet instance
     attr_reader :nodes
+    # An EdgeSet instance
     attr_reader :edges
 
+    # Initializes the SocialGraph
+    #
+    # users - A UserCollection instance
+    # depth - An integer specifying how many orders deep the connections
+    # should go
+    #
+    # Returns a new SocialGraph instance
 		def initialize(users, depth=6)
       @nodes = NodeSet.new(users.names)
       @edges = EdgeSet.new
@@ -36,25 +25,45 @@ module SixDegrees
 			self
 		end
 
+    # Builds the first order of connections from a UserCollection
+    # No useful return value
 		def build_first_order(users)
       users.each do |user|
-        connect :from  => user, :to => user.mutual_mentions, :order => 1
+        connect :from  => user.name,
+                :to => user.mutual_mentions.map(&:name),
+                :order => 1
       end
 		end	
 
+    # Builds connections from order 2 to up to depth.
+    # First order connections must be built prior to calling this method in order
+    # for it to work.
+    # No useful return value
     def build_up_to_nth_order(depth)
       (2..depth).each do |order|
         build_nth_order(order)
       end
     end
 
+    # Builds the connections for a single specific order
+    # (order-1) must already be built in order for this to work correctly.
+    #
+    # order - An integer representing the order to build
+    #
+    # No useful return value
     def build_nth_order(order)
-      #yields each node that has a connection at the given order - the outer loop of the pseudocode
       each_node_with_connections(order-1) do |node|
         connect :from => node, :to => discover_connections(node, order), :order => order
       end
     end
 
+    # Traverses nodes connected to the subject node and finds new connections
+    # (order-1) must already be built in order for this to work correctly.
+    #
+    # node  - The String name of the node whose connections will be searched for
+    # order - The Integer order that the connections will be discovered for
+    #
+    # Returns an Array of Strings representing Nodes
     def discover_connections(node, order)
       connections = []
       each_node_connected_to node, :at => order-1 do |connected_node|
@@ -65,39 +74,17 @@ module SixDegrees
       connections
     end
 
-    def each_node_with_connections(order)
-      edges.at_order(order).sources.each do |node|
-        yield(node)
-      end
-    end
-
-    def each_node_connected_to(node, params)
-      order = params[:at]
-      edges.at_order(order).nodes_connected_to(node).each do |connected_to|
-        yield(connected_to)
-      end
-    end
-
-    # Returns true if the from node is already connected to the to node
-    # Will need to do something like flatten the hash and combine all levels of froms
-    def connected?(from, to, order=:all)
-      from = nodes.find_by_name(from) if not from.kind_of?(Node)
-      to   = nodes.find_by_name(to) if not from.kind_of?(Node)
-      edges.connected?(from, to, order)
-    end
-
-    # Operates on the edgeset to create an edge between two nodes, or one node and a collecion of nodes
+    # Operates on the edgeset to create an edge between two nodes, or one node and
+    # a collecion of nodes
     #
-    #  - params
-    #     :source - Source node (Node or User object)
-    #     :to     - Target node (Node or User object), or an array of Node or User objects
-    #     :order  - The order at which this connection will be created
+    # params: :source - The String name of the source node
+    #         :to     - The String name of the target node, or alternatively, an
+    #                   Array of names
+    #         :order  - The Integer order at which this connection will be created
     #
     # No useful return value
 		def connect(params)
       order = params[:order]; from = params[:from]; to = params[:to]
-			from  = nodes.find_by_name(from.name) if from.kind_of?(User)
-			to    = nodes.find_by_name(to.name) if to.kind_of?(User)
 
 			if to.kind_of?(Enumerable)
 				to.each do |singularized_to|
@@ -107,14 +94,5 @@ module SixDegrees
 				edges.add(from, to, order)
 			end
 		end
-
-    # This is a convenience method to make code more intention revealing
-    def first_order_connections(node)
-      edges.at_order(1).nodes_connected_to(node)
-    end
-
-    def first_order_connection?(from, to)
-      edges.connected?(nodes.find_by_name(from), nodes.find_by_name(to), 1)
-    end
   end
 end

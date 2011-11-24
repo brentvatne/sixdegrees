@@ -1,22 +1,37 @@
 module SixDegrees
   # The job of this class is to manage logic related to connections between nodes
   class EdgeSet
+    # A two-dimensional Hash edges[order][source_node]
     attr_reader :edges
 
-    # Initializes from a collection of edges if they are passed in,
-    # otherwise, initializes an empty collection
+    # Initializes a new set of edges, and if another set is passed in, it is copied
+    # into the new collection.
+    #
+    # edge_set - An EdgeSet instance
+    #
+    # Returns a new EdgeSet instance
     def initialize(edge_set = false)
-      @edges  = Hash.new do |o_hash, order|
-        o_hash[order] = Hash.new { |s_hash, source| s_hash[source] = [] }
+      @edges  = Hash.new do |order_hash, order|
+        order_hash[order] = Hash.new { |source_node_hash, source| source_node_hash[source] = [] }
       end
+
       edge_set.keys.each { |key| @edges[key] = edge_set[key] } if edge_set
     end
 
+    # Creates a new edge
+    #
+    # source - A String node name
+    # target - A String node
+    # order  - An Integer order
+    #
+    # Returns the EdgeSet instance
     def add(source, target, order)
       edges[order][source].push(target).sort!.uniq! if target != source
+      self
     end
 
-    # Returns all nodes that are connected at order n
+    # Selects orders at order n
+    # Returns a new EdgeSet instance
     def at_order(order)
       if edges.has_key?(order)
         EdgeSet.new({ order => edges.fetch(order) })
@@ -25,35 +40,55 @@ module SixDegrees
       end
     end
 
+    # Iterates over edges based on the order
+    # Returns the EdgeSet instance
     def each_order
       @edges.values.each { |order| yield(order) }
+      self
     end
 
-    # Returns all nodes connected to
+    # Selects nodes that are connected at an endpoint to a given node
+    # Chainable with at_order
+    #
+    # source_node - A String node name
+    #
+    # Returns an Array of Strings representing nodes
     def nodes_connected_to(source_node)
       reduce_edges do |all_connected_nodes, edges_at_order_n|
         all_connected_nodes << edges_at_order_n[source_node]
       end
     end
 
-    # Next step: make this get a 'uniq' list of sources at every order
+
+    # Selects all nodes that act as the start point for an edge
+    # Chainable with at_order
+    #
+    # Returns an Array of Strings representing nodes
     def sources
       reduce_edges do |all_sources, edges_at_order_n|
         all_sources << edges_at_order_n.keys
       end
     end
 
-    def reduce_edges(&block)
+    # Convenience method to subset edges
+    #
+    # Accepts a block
+    #
+    # Returns an Array, the contents of the Array depend on the block
+    def reduce_edges
       edges.values.inject([]) do |total, edges_at_order_n|
         yield(total, edges_at_order_n)
       end.flatten.uniq.sort
     end
 
-    # Then, loop over the nth for the number of orders we want, write
-    # 3rd order acceptance test, and try on quiz data.
-    # Once that works, refactor.
+    # Determines whether an edge exists from the source to the target
+    # at a given order (all by default).
     #
-    # If no order is passed, iterate through all
+    # source - A String node name
+    # target - A String node name
+    # order  - The order to search for the connection at
+    #
+    # Returns true if connected, false if not connected
     def connected?(source, target, order = :all)
       return true if source == target
 
@@ -65,14 +100,13 @@ module SixDegrees
       end
     end
 
+    # Determines whether an edge exists from the source to the target
+    # A convenience method to keep connected? readable
+    #
+    # Returns true if connected, false if not connected
     def connected_at_order?(source, target, order)
       return false unless edges.keys.include?(order)
       !!(@edges[order][source].include?(target))
-    end
-
-
-    def ==(other)
-      edges == other.edges
     end
   end
 end
