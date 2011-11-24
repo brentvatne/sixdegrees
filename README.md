@@ -1,17 +1,21 @@
 RMU Entrance Exam for January, 2012
+====================================
 PuzzleNode: Six Degrees of Separation
-http://puzzlenode.com/puzzles/23
+--------------------------------------
+###http://puzzlenode.com/puzzles/23
 -------------------------------------
 Tested with Ruby 1.9.3p0
 
 Sample Usage:
 --------------
 
-    require 'six_degrees'
+````ruby
+require 'six_degrees'
 
-    tweets        = File.open("tweet_file.txt").read
-    twitter_users = SixDegrees::TwitterParser.parse(tweets)
-    social_graph  = SixDegrees::SocialGraph.new(twitter_users)
+tweets        = File.open("tweet_file.txt").read
+twitter_users = SixDegrees::TwitterParser.parse(tweets)
+social_graph  = SixDegrees::SocialGraph.new(twitter_users)
+````
 
 Or you can use the twitter_network.rb file from the command line:
 
