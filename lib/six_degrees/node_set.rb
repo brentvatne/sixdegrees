@@ -34,5 +34,12 @@ module SixDegrees
         yield(node)
       end
     end
+
+    # Public: Gets the last node
+    #
+    # Returns the last node in the collection
+    def last
+      @nodes.last
+    end
   end
 end

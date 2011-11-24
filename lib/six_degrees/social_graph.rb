@@ -15,7 +15,8 @@ module SixDegrees
     # users - A UserCollection instance
     # depth - An integer specifying how many orders deep the connections
     #         should go
-    def initialize(users, depth=6)
+    def initialize(users, depth=6, output_buffer = $stdout)
+      @output_buffer = output_buffer
       @nodes = NodeSet.new(users.names)
       @edges = EdgeSet.new
       build_first_order(users)

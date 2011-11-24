@@ -1,29 +1,13 @@
 #!/usr/bin/env ruby
 require File.join(File.expand_path(File.dirname(__FILE__)), '/../lib/six_degrees')
 
-module SixDegrees
-  def self.build_graph_from_twitter_file(file)
-    tweets = File.open(file).read
-    users  = TwitterParser.parse(tweets)
-    graph  = SocialGraph.new(users)
-    self.print_graph(graph)
-    end
-
-  def self.print_graph(graph)
-    graph.nodes.each do |node|
-      puts node
-      graph.edges.each_order do |order|
-        puts order[node].join(", ") if (order[node].length > 0)
-      end
-      puts
-    end
-  end
-end
-
-file_path = ARGV[0]
-if file_path
+if file_path = ARGV[0]
   file_path = File.expand_path("../sixdegrees/docs/#{file_path}_input.txt") if file_path == "complex" || file_path == "simple"
-  SixDegrees::build_graph_from_twitter_file(file_path)
+
+  tweets = File.open(file_path).read
+  users  = SixDegrees::TwitterParser.parse(tweets)
+  graph  = SixDegrees::SocialGraph.new(users)
+  graph.print
 else
   puts "Please provide a full path to a tweets data file, or use the sample files: simple or complex"
   puts "For example: ruby bin/twitter_graph simple"

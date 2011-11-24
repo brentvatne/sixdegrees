@@ -4,6 +4,17 @@ module SixDegrees
   # API of SocialGraph
   module GraphUtilityMethods
 
+    # Public: Print users and their connections to output_buffer, default $stdout
+    def print
+      nodes.each do |node|
+        @output_buffer.puts node
+        edges.each_order do |order|
+          @output_buffer.puts order[node].join(", ") if (order[node].length > 0)
+        end
+        @output_buffer.puts unless node == nodes.last
+      end
+    end
+
     # Public: Selects are first order connections for a given node
     #
     # node - A String representing a node
@@ -34,7 +45,7 @@ module SixDegrees
       end
     end
 
-    # Public: Iterates over each node that is the end point of a connection of the given node, 
+    # Public: Iterates over each node that is the end point of a connection of the given node,
     # at any order
     def each_node_connected_to(node, params)
       order = params[:at]
