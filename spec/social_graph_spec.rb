@@ -3,7 +3,7 @@ describe SixDegrees::SocialGraph do
   let(:users) { SixDegrees::TwitterParser.parse(tweets) }
 
   describe "acceptance test" do
-    let(:tweets) { File.open(Dir.pwd + "/docs/sample_input.txt").read }
+    let(:tweets) { File.open(Dir.pwd + "/docs/simple_input.txt").read }
 
     it "correctly identifies first order connections in the sample file" do
       subject.first_order_connection?("alberta", "bob").should be_true

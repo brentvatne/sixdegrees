@@ -20,6 +20,11 @@ module SixDegrees
   end
 end
 
-file_path = ARGV[0] || File.expand_path("../sixdegrees/docs/complex_input.txt")
-
-SixDegrees::build_graph_from_twitter_file(file_path)
+file_path = ARGV[0]
+if file_path
+  file_path = File.expand_path("../sixdegrees/docs/#{file_path}_input.txt") if file_path == "complex" || file_path == "simple"
+  SixDegrees::build_graph_from_twitter_file(file_path)
+else
+  puts "Please provide a full path to a tweets data file, or use the sample files: simple or complex"
+  puts "For example: ruby bin/twitter_graph simple"
+end
