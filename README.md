@@ -1,5 +1,5 @@
 RMU Entrance Exam for January, 2012
-====================================
+--------------------------------------
 PuzzleNode: Six Degrees of Separation
 --------------------------------------
 ###http://puzzlenode.com/puzzles/23
@@ -38,24 +38,24 @@ A connection is determined using the following rules:
 All examples are from the point of view of A.
 
 First order:
-  - A is mentioned by B, B is mentioned by A
-  => A is first order with B, B is first order with A
-  *note: if A mentions B and B does not mention A, there is no direct relationship
+-   A is mentioned by B, B is mentioned by A
+-   => A is first order with B, B is first order with A
+    *note: if A mentions B and B does not mention A, there is no direct relationship
 
 Second order:
-  - A is first order with B
-  - B is first order with C
-  - A is not first order with C
-  => A is second order with C
+-   A is first order with B
+-   B is first order with C
+-   A is not first order with C
+-   => A is second order with C
 
 Third order:
-  - A is second order with B
-  - B is first order with C
-  - A has no higher level connection with C
-  => A is third order with C
+-   A is second order with B
+-   B is first order with C
+-   A has no higher level connection with C
+-   => A is third order with C
 
 nth order:
-  - A is n-1th order with B
-  - B is first order with C
-  - A has no connection higher than n-1th order with C
-  => A has a nth order connection with C
+-   A is n-1th order with B
+-   B is first order with C
+-   A has no connection higher than n-1th order with C
+-   => A has a nth order connection with C
