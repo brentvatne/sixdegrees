@@ -17,7 +17,7 @@ module SixDegrees
     #         should go
     def initialize(users, depth=6, output_buffer = $stdout)
       @output_buffer = output_buffer
-      @nodes = NodeSet.new(users.names)
+      @nodes = Array.new(users.names)
       @edges = EdgeSet.new
       build_first_order(users)
       build_up_to_nth_order(depth)
