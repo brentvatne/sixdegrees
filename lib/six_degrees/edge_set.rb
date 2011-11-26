@@ -38,17 +38,45 @@ module SixDegrees
       end
     end
 
+    # Determines whether an edge exists from the source to the target
+    # at a given order (all by default).
+    #
+    # source - A String node name
+    # target - A String node name
+    # order  - The Integer order to search for the connection at (optional,
+    #          default => :all)
+    #
+    # Returns true if connected, false if not connected
+    def connected?(source, target, order = :all)
+      return true if source == target
+
+      if order == :all
+        edges.keys.each { |order| return true if connected?(source, target, order) }
+        false
+      else
+        return false unless edges.keys.include?(order)
+        edges[order][source].include?(target)
+      end
+    end
+
     # Iterates over edges based on the order
+    #
+    # Yields an order
+    #
     # Returns the EdgeSet instance
     def each_order
       @edges.values.each { |order| yield(order) }
       self
     end
 
-    # Selects nodes that are connected at an endpoint to a given node
+    # Selects nodes connected to the given node, as an endpoint. This means
+    # if a relationship brent -> ana exists, ana would be selected if brent
+    # is passed in; brent would not be selected if ana were to be the source.
     # Chainable with at_order
     #
     # source_node - A String node name
+    #
+    # Yields a node (String)
     #
     # Returns an Array of Strings representing nodes
     def nodes_connected_to(source_node)
@@ -56,7 +84,6 @@ module SixDegrees
         all_connected_nodes << edges_at_order_n[source_node]
       end
     end
-
 
     # Selects all nodes that act as the start point for an edge
     # Chainable with at_order
@@ -77,27 +104,6 @@ module SixDegrees
       edges.values.inject([]) do |total, edges_at_order_n|
         yield(total, edges_at_order_n)
       end.flatten.uniq.sort
-    end
-
-    # Determines whether an edge exists from the source to the target
-    # at a given order (all by default).
-    #
-    # source - A String node name
-    # target - A String node name
-    # order  - The Integer order to search for the connection at (optional,
-    #          default => :all)
-    #
-    # Returns true if connected, false if not connected
-    def connected?(source, target, order = :all)
-      return true if source == target
-
-      if order == :all
-        edges.keys.each { |order| return true if connected?(source, target, order) }
-        false
-      else
-        return false unless edges.keys.include?(order)
-        edges[order][source].include?(target)
-      end
     end
   end
 end
