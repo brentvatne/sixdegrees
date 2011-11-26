@@ -8,12 +8,12 @@ module SixDegrees
     # into the new collection.
     #
     # edge_set - An EdgeSet instance, default is false
-    def initialize(edge_set = false)
+    def initialize(edges_subset = false)
       @edges  = Hash.new do |order_hash, order|
         order_hash[order] = Hash.new { |source_node_hash, source| source_node_hash[source] = [] }
       end
 
-      edge_set.keys.each { |key| @edges[key] = edge_set[key] } if edge_set
+      edges_subset.keys.each { |key| @edges[key] = edges_subset[key] } if edges_subset
     end
 
     # Creates a new edge
@@ -84,27 +84,20 @@ module SixDegrees
     #
     # source - A String node name
     # target - A String node name
-    # order  - The order to search for the connection at
+    # order  - The Integer order to search for the connection at (optional,
+    #          default => :all)
     #
     # Returns true if connected, false if not connected
     def connected?(source, target, order = :all)
       return true if source == target
 
       if order == :all
-        edges.keys.each { |order| return true if connected_at_order?(source, target, order) }
+        edges.keys.each { |order| return true if connected?(source, target, order) }
         false
       else
-        connected_at_order?(source, target, order)
+        return false unless edges.keys.include?(order)
+        edges[order][source].include?(target)
       end
-    end
-
-    # Determines whether an edge exists from the source to the target
-    # A convenience method to keep connected? readable
-    #
-    # Returns true if connected, false if not connected
-    def connected_at_order?(source, target, order)
-      return false unless edges.keys.include?(order)
-      !!(@edges[order][source].include?(target))
     end
   end
 end

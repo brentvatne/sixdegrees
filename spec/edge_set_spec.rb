@@ -23,13 +23,16 @@ describe SixDegrees::EdgeSet do
 
   describe "initialize" do
     it "returns a new edgeset built from edges if passed a collection of edges" do
+      # return_value = SixDegrees::EdgeSet.new(subject.edges)
+      # return_value.should be_kind_of SixDegrees::EdgeSet
+      # return_value.should == subject
     end
   end
 
   describe "add" do
     it "will not let an edge be between a node and itself" do
-
     end
+
     it "will not create duplicate edges" do
     end
   end
