@@ -2,7 +2,7 @@
 require File.join(File.expand_path(File.dirname(__FILE__)), '/../lib/six_degrees')
 
 if file_path = ARGV[0]
-  file_path = File.expand_path("../sixdegrees/docs/#{file_path}_input.txt") if file_path == "complex" || file_path == "simple"
+  file_path = File.expand_path("./docs/#{file_path}_input.txt") if file_path == "complex" || file_path == "simple"
 
   tweets = File.open(file_path).read
   users  = SixDegrees::TwitterParser.parse(tweets)
