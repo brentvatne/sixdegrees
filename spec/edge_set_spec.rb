@@ -21,24 +21,6 @@ describe SixDegrees::EdgeSet do
     subject.add brent, diana, 3
   end
 
-  describe "initialize" do
-    it "returns a new edgeset built from edges if passed a collection of edges" do
-      pending
-      # return_value = SixDegrees::EdgeSet.new(subject.edges)
-      # return_value.should be_kind_of SixDegrees::EdgeSet
-      # return_value.should == subject
-    end
-  end
-
-  describe "add" do
-    it "will not let an edge be between a node and itself" do
-      pending
-    end
-
-    it "will not create duplicate edges" do
-      pending
-    end
-  end
 
   describe "at_order" do
     it "returns a new EdgeSet with only the edges at the given order" do
@@ -58,11 +40,6 @@ describe SixDegrees::EdgeSet do
   end
 
   describe "nodes_connected_to" do
-    it "returns an array of nodes" do
-      # subject.nodes_connected_to(brent).first.should be_kind_of SixDegrees::Node
-      pending
-    end
-
     it "only returns nodes connected the passed in node" do
       subject.nodes_connected_to(brent).each do |supposedly_connected|
         subject.connected?(brent, supposedly_connected).should be_true
@@ -77,11 +54,6 @@ describe SixDegrees::EdgeSet do
   end
 
   describe "sources" do
-    it "returns an array of nodes" do
-      pending
-      # subject.sources.first.should be_kind_of SixDegrees::Node
-    end
-
     it "should be sorted" do
       subject.sources.should == subject.sources.sort
     end

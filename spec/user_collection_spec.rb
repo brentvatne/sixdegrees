@@ -37,14 +37,6 @@ describe SixDegrees::User do
     brent.add_mention(bob)
   end
 
-  describe "add_mention" do
-    pending
-  end
-
-  describe "add_mentions" do
-    pending
-  end
-
   describe "mentioned?" do
     it "returns true when the user has been mentioned by the user" do
       alberta.mentioned?(bob).should be_true

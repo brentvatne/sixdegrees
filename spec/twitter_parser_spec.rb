@@ -35,11 +35,5 @@ describe SixDegrees::TwitterParser do
       bob.mentioned?(christie).should be_true
       christie.mentioned?(bob).should be_true
     end
-
-    it "parses more than one user" do
-      users = SixDegrees::TwitterParser.parse(tweets)
-      pending
-      # users.length.should == 3
-    end
   end
 end

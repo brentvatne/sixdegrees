@@ -49,7 +49,7 @@ documentation, or it might actually be long.
 Write your own parser that populates a UserCollection instance with
 users and their mentions, then pass that in to a new SocialGraph.
 
-## What it does (down at the bottom because evaluaters already know!)
+## What it does (down at the bottom because evaluators already know!)
 ### Problem Description
 http://puzzlenode.com/puzzles/23
 
